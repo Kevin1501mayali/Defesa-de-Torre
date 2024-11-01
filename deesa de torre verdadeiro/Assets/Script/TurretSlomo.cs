@@ -3,71 +3,63 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class TurretSlomo : Turret 
 
+public class TurretSlomo : Turret
 {
+    [SerializeField] private float aps = 4f;
+    [SerializeField] private float FreezeTime = 5f;
 
-    [SerializeField] private float aps = 4f;   
-
-    [SerializeField] private float FreezeTime = 1f;
-    
-
-
-
-    private void Update()   
-
+    private void Update()
     {
-        RotateTowardsTarget();
-        timeUntilFire += Time.deltaTime;        
+        RotateTowardsTarget(); 
+        timeUntilFire += Time.deltaTime;
 
-        if (timeUntilFire >= 1f / aps)        
-
+        if (timeUntilFire >= 1f / aps) 
         {
             FreezeEnemies(); 
             timeUntilFire = 0f; 
         }
-
     }
-    private void FreezeEnemies() 
+
+
+    private void FreezeEnemies()
     {
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, targetingrange, (Vector2)transform.position, 0f, enemyMask);         
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, targetingrange, (Vector2)transform.position, 0f, enemyMask);
 
-        if (hits.Length > 0)       
-
+        if (hits.Length > 0)
         {
             for (int i = 0; i < hits.Length; i++)
             {
                 RaycastHit2D hit = hits[i];
+                EnemyMovement em = hit.transform.GetComponent<EnemyMovement>();
+                Health enemyHealth = hit.transform.GetComponent<Health>();
 
-                EnemyMovement em = hit.transform.GetComponent<EnemyMovement>();               
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDamage(0.1f); 
+                }
 
-                em.UpdateSpeed(0.5f);               
-
-                StartCoroutine(ResetEnemySpeed(em));             
-
+                em.UpdateSpeed(0.5f); 
+                StartCoroutine(ResetEnemySpeed(em));
             }
         }
     }
-    private IEnumerator ResetEnemySpeed(EnemyMovement em)     
 
+
+    private IEnumerator ResetEnemySpeed(EnemyMovement em)
     {
-        yield return new WaitForSeconds(FreezeTime);       
-
-        em.ResetSpeed();       
-
+        yield return new WaitForSeconds(FreezeTime); 
+        em.ResetSpeed(); 
     }
+
     private void RotateTowardsTarget()
     {
-
         if (target == null)
         {
-            //Debug.LogWarning("Nenhum alvo detectado para rotacionar.");
-            return;
+            return; 
         }
 
-
         float angle = Mathf.Atan2(target.position.y - transform.position.y, target.position.x - turretRotationPoint.position.x) * Mathf.Rad2Deg - 90;
-
 
         Quaternion targetRotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
         turretRotationPoint.rotation = Quaternion.RotateTowards(turretRotationPoint.rotation, targetRotation, rotationspeed * Time.deltaTime);
