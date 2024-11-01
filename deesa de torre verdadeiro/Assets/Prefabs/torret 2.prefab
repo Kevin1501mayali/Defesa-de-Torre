@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1790989635
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: -1550525283, guid: 17a9771e47f26cf41afbf85c9aef0135, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -107,8 +107,7 @@ MonoBehaviour:
   firingPoint: {fileID: 5902118233692028548}
   rotationspeed: 200
   bps: 0.7
-  burnDuration: 3
-  burnDamagePerSecond: 1
+  highDamage: 10
 --- !u!1 &1343217462617826590
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,7 +134,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.332014, y: -5.7474356, z: -0.044133313}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5043817463400835287}
@@ -276,7 +275,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1790989635
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -1260424484, guid: 17a9771e47f26cf41afbf85c9aef0135, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
