@@ -1,63 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using UnityEditor; // Importa o namespace do editor Unity, geralmente não necessário em scripts de runtime
 using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour 
-
+// Define a classe EnemyMovement que herda de MonoBehaviour
+public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;    
+    [SerializeField] private Rigidbody2D rb; // Componente Rigidbody2D para a física do inimigo
 
-    [SerializeField] private float moveSpeed = 2f;    
+    [SerializeField] private float moveSpeed = 2f; // Velocidade de movimento do inimigo
 
-    private Transform target;    
+    private Transform target; // Alvo que o inimigo deve seguir
 
-    private int pathIndex = 0;   
+    private int pathIndex = 0; // Índice do caminho que o inimigo está seguindo
 
-    private float baseSpeed;    
+    private float baseSpeed; // Velocidade base do inimigo
 
-   
+    // Método chamado ao iniciar o objeto
     private void Start()
     {
-        baseSpeed = moveSpeed; 
-        target = LevelManager.instance.path[pathIndex];
+        baseSpeed = moveSpeed; // Armazena a velocidade inicial como base
+        target = LevelManager.instance.path[pathIndex]; // Define o primeiro alvo como o primeiro ponto do caminho
     }
 
-  
+    // Método chamado a cada frame
     private void Update()
     {
-        if (Vector2.Distance(target.position, transform.position) <= 0.1f)         
+        // Verifica se o inimigo chegou perto do alvo
+        if (Vector2.Distance(target.position, transform.position) <= 0.1f)
         {
-            pathIndex++; 
+            pathIndex++; // Avança para o próximo ponto do caminho
 
-            if (pathIndex == LevelManager.instance.path.Length)            
-
+            // Verifica se chegou ao final do caminho
+            if (pathIndex == LevelManager.instance.path.Length)
             {
-                EnemySpawner.onEnemyDestroy.Invoke();
-                Destroy(gameObject); 
-                return;
+                EnemySpawner.onEnemyDestroy.Invoke(); // Invoca evento para indicar que o inimigo foi destruído
+                Destroy(gameObject); // Destroi o objeto inimigo
+                return; // Sai do método
             }
             else
             {
-                target = LevelManager.instance.path[pathIndex];
+                target = LevelManager.instance.path[pathIndex]; // Atualiza o alvo para o próximo ponto do caminho
             }
         }
     }
-    private void FixedUpdate()   
 
+    // Método chamado em intervalos fixos para atualizar a física
+    private void FixedUpdate()
     {
-        Vector2 direction = (target.position - transform.position).normalized;         
+        // Calcula a direção do movimento em relação ao alvo
+        Vector2 direction = (target.position - transform.position).normalized;
 
+        // Atualiza a velocidade do Rigidbody2D na direção do alvo
         rb.velocity = direction * moveSpeed;
     }
-    public void UpdateSpeed(float newSpeed)   
 
+    // Método para atualizar a velocidade do inimigo
+    public void UpdateSpeed(float newSpeed)
     {
-        moveSpeed = newSpeed;
+        moveSpeed = newSpeed; // Define a nova velocidade
     }
-    public void ResetSpeed()     
 
+    // Método para resetar a velocidade do inimigo à base
+    public void ResetSpeed()
     {
-        moveSpeed = baseSpeed; 
+        moveSpeed = baseSpeed; // Restaura a velocidade base
     }
 }
